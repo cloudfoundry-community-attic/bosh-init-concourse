@@ -24,13 +24,14 @@ resource_pools:
 - name: default
   network: default
   cloud_properties:
-    instance_type: m3.medium
+    instance_type: m3.large
+
 
 jobs:
 - name: concourse
   instances: 1
+  persistent_disk: 10240
   templates:
-  - {release: concourse, name: consul-agent}
   - {release: concourse, name: atc}
   - {release: concourse, name: tsa}
   - {release: concourse, name: postgresql}
@@ -56,9 +57,6 @@ jobs:
         name: atc
         password: ${POSTGRES_PASSWORD}
 
-    consul:
-      agent:
-        servers: {lan: [$EIP]}
     garden:
       # cannot enforce quotas in bosh-lite
       disk_quota_enabled: false
