@@ -38,23 +38,27 @@ jobs:
   - {release: concourse, name: groundcrew}
   networks:
   - name: vip
-    static_ips: &web-ips [&web-ip $EIP]
+    static_ips: [$EIP]
   - name: default
 
   properties:
     atc:
       development_mode: true
       postgresql:
-        database: &atc-db atc
-        role: &atc-role
+        database: atc
+        role:
           name: atc
           password: ${POSTGRES_PASSWORD}
     postgresql:
-      databases: [{name: *atc-db}]
-      roles: [*atc-role]
+      databases: [{name: atc}]
+      roles:
+      - role:
+        name: atc
+        password: ${POSTGRES_PASSWORD}
+
     consul:
       agent:
-        servers: {lan: *web-ips}
+        servers: {lan: [$EIP]}
     garden:
       # cannot enforce quotas in bosh-lite
       disk_quota_enabled: false
