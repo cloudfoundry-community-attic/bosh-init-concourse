@@ -16,7 +16,7 @@ First, fetch the required assets, including the `bosh-init` CLI:
 ./bin/fetch_assets.sh
 ```
 
-Then create the `redis.yml` manifest:
+Then create the `concourse.yml` manifest:
 
 ```
 EIP=23.23.23.23 \
@@ -35,7 +35,7 @@ Finally, run the `bosh-init deploy` command (via helpful wrapper):
 The output will look similar to:
 
 ```
-Deployment manifest: '/Users/drnic/Projects/bosh-deployments/experiments/redis-micro/redis-from-scratch.yml'
+Deployment manifest: '/Users/drnic/Projects/bosh-deployments/experiments/bosh-init-concourse/concourse.yml'
 Deployment state: 'deployment.json'
 
 Started validating
