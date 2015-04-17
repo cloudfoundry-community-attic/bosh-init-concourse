@@ -34,9 +34,9 @@ jobs:
   templates:
   - {release: concourse, name: atc}
   - {release: concourse, name: tsa}
+  - {release: concourse, name: groundcrew}
   - {release: concourse, name: postgresql}
   - {release: garden-linux, name: garden}
-  - {release: concourse, name: groundcrew}
   networks:
   - name: vip
     static_ips: [$EIP]
@@ -45,22 +45,29 @@ jobs:
   properties:
     atc:
       development_mode: true
+
       postgresql:
-        database: atc
+        address: 127.0.0.1:5432
         role:
           name: atc
           password: ${POSTGRES_PASSWORD}
+
     postgresql:
       databases: [{name: atc}]
       roles:
-      - role:
-        name: atc
-        password: ${POSTGRES_PASSWORD}
+        - role:
+          name: atc
+          password: ${POSTGRES_PASSWORD}
+
+    tsa:
+      atc:
+        address: 127.0.0.1:8080
+
+    groundcrew:
+      tsa:
+        host: 127.0.0.1
 
     garden:
-      # cannot enforce quotas in bosh-lite
-      disk_quota_enabled: false
-
       listen_network: tcp
       listen_address: 0.0.0.0:7777
 
