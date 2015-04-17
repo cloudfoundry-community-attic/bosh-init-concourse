@@ -14,9 +14,11 @@ if [[
   exit 1
 fi
 
-cat >redis.yml <<EOF
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-"secret-postgres-password"}
+
+cat >concourse.yml <<YAML
 ---
-name: redis
+name: concourse
 
 resource_pools:
 - name: default
@@ -25,20 +27,42 @@ resource_pools:
     instance_type: m3.medium
 
 jobs:
-- name: redis
+- name: concourse
   instances: 1
   templates:
-  - {name: redis, release: redis}
+  - {release: concourse, name: consul-agent}
+  - {release: concourse, name: atc}
+  - {release: concourse, name: tsa}
+  - {release: concourse, name: postgresql}
+  - {release: garden-linux, name: garden}
+  - {release: concourse, name: groundcrew}
   networks:
   - name: vip
-    static_ips: [$EIP]
+    static_ips: &web-ips [&web-ip $EIP]
   - name: default
 
   properties:
-    redis:
-      address: "127.0.0.1"
-      password: "redis"
-      port: 6379
+    atc:
+      development_mode: true
+      postgresql:
+        database: &atc-db atc
+        role: &atc-role
+          name: atc
+          password: ${POSTGRES_PASSWORD}
+    postgresql:
+      databases: [{name: *atc-db}]
+      roles: [*atc-role]
+    consul:
+      agent:
+        servers: {lan: *web-ips}
+    garden:
+      # cannot enforce quotas in bosh-lite
+      disk_quota_enabled: false
+
+      listen_network: tcp
+      listen_address: 0.0.0.0:7777
+
+      allow_host_access: true
 
 networks:
 - name: default
@@ -82,4 +106,4 @@ cloud_provider:
       path: /var/vcap/micro_bosh/data/cache
 
     ntp: [0.north-america.pool.ntp.org]
-EOF
+YAML

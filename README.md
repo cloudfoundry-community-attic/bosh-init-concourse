@@ -1,9 +1,11 @@
-bosh-init deploy redis
-======================
+bosh-init deploy concourse
+==========================
 
 The new [bosh-init](https://github.com/cloudfoundry/bosh-init) CLI can do more than just deploy Micro BOSH.
 
-This project will deploy a single server/VM/instance on AWS EC2 us-east-1 region running Redis server. It is using the new `bosh-init` CLI and the BOSH community [redis-boshrelease](https://github.com/cloudfoundry-community/redis-boshrelease) release.
+This project will deploy a single server/VM/instance on AWS EC2 us-east-1 region running [Concourse](http://concourse.ci) server.[![concourse-example](http://cl.ly/image/0W090F1H0a0y/concourse-example.png)](http://concourse.ci)
+
+It is using the new `bosh-init` CLI to deploy concourse's BOSH release.
 
 Usage
 -----
@@ -72,9 +74,9 @@ The security group must open the following ports to the machine running `./bin/d
 -	22
 -	6868
 
-The security group must open the following port for any clients to the Redis server:
+The security group must open the following port for the `fly` client and web browser to access the ATC service:
 
--	6379
+-	8080
 
 Dependencies
 ------------
