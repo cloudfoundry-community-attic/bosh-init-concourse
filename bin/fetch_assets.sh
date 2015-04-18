@@ -1,6 +1,7 @@
 #!/bin/bash
 
-concourse_version=${concourse_version:-0.45.0}
+# concourse_version=${concourse_version:-0.45.0}
+concourse_version=${concourse_version:-"0.45.0+dev.1"}
 garden_version=${garden_version:-0.190.0}
 aws_cpi_version=${aws_cpi_version:-5}
 stemcell_version=${stemcell_version:-2830}
@@ -13,8 +14,13 @@ mkdir -p bin
 
 if [[ ! -f assets/concourse-${concourse_version}.tgz ]]; then
   echo "Downloading concourse-${concourse_version}.tgz"
-  curl -Lo assets/concourse-${concourse_version}.tgz \
-    "https://bosh.io/d/github.com/concourse/concourse?v=${concourse_version}"
+  if [[ "${concourse_version}" == "0.45.0+dev.1" ]]; then
+    curl -Lo assets/concourse-${concourse_version}.tgz \
+      "https://s3.amazonaws.com/concourse-tutorial-bosh-init/concourse-0.45.0%2Bdev.1.tgz"
+  else
+    curl -Lo assets/concourse-${concourse_version}.tgz \
+      "https://bosh.io/d/github.com/concourse/concourse?v=${concourse_version}"
+  fi
 fi
 if [[ ! -f assets/garden-linux-release-${garden_version}.tgz ]]; then
   echo "Downloading garden-linux-release-${garden_version}.tgz"

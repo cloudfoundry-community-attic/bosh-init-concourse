@@ -1,6 +1,7 @@
 #!/bin/bash
 
-concourse_version=${concourse_version:-0.45.0}
+# concourse_version=${concourse_version:-0.45.0}
+concourse_version=${concourse_version:-0.45.0+dev.1}
 garden_version=${garden_version:-0.190.0}
 aws_cpi_version=${aws_cpi_version:-5}
 stemcell_version=${stemcell_version:-2830}
