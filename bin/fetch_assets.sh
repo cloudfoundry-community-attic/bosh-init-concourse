@@ -16,7 +16,7 @@ if [[ ! -f assets/concourse-${concourse_version}.tgz ]]; then
   echo "Downloading concourse-${concourse_version}.tgz"
   if [[ "${concourse_version}" == "0.45.0+dev.1" ]]; then
     curl -Lo assets/concourse-${concourse_version}.tgz \
-      "https://s3.amazonaws.com/concourse-tutorial-bosh-init/concourse-0.45.0%2Bdev.1.tgz"
+      "https://s3.amazonaws.com/concourse-tutorial-bosh-init/concourse-0.45.0%20dev.1.tgz"
   else
     curl -Lo assets/concourse-${concourse_version}.tgz \
       "https://bosh.io/d/github.com/concourse/concourse?v=${concourse_version}"
